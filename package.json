@@ -1,6 +1,6 @@
 {
   "name": "medusa-payment-razorpay",
-  "version": "7.1.3",
+  "version": "7.1.4",
   "description": "Razorpay Payment provider for Meduas Commerce",
   "main": "dist/index.js",
   "repository": {
@@ -14,7 +14,6 @@
   "author": "Medusa",
   "license": "MIT",
   "scripts": {
-    "prepare": "cross-env NODE_ENV=production yarn run build",
     "test": "jest --passWithNoTests src",
     "build": "tsc",
     "watch": "tsc --watch"

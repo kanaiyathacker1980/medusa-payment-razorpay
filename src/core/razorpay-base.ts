@@ -403,6 +403,7 @@ abstract class RazorpayBase extends AbstractPaymentProcessor {
       resource_id,
       customer,
       paymentSessionData,
+      order_id
     } = context;
 
     const sessionNotes = paymentSessionData.notes as Record<string, string>;
@@ -585,7 +586,7 @@ abstract class RazorpayBase extends AbstractPaymentProcessor {
   async updatePayment(
     context: PaymentProcessorContext
   ): Promise<PaymentProcessorError | PaymentProcessorSessionResponse | void> {
-    const { amount, customer, paymentSessionData, currency_code, resource_id } =
+    const { amount, customer, paymentSessionData, currency_code, resource_id, order_id } =
       context;
     const cart = await this.cartService.retrieve(resource_id, {
       relations: ["billing_address"],

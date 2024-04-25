@@ -8,7 +8,7 @@ import {
   CustomerService,
   isPaymentProcessorError,
   Logger,
-  PaymentProcessorContext,
+  PaymentProcessorContext as MedusaPaymentProcessorContext,
   PaymentProcessorError,
   PaymentProcessorSessionResponse,
   PaymentSessionStatus,
@@ -24,6 +24,11 @@ import { Customers } from "razorpay/dist/types/customers";
  * The paymentIntent object corresponds to a razorpay order.
  *
  */
+
+type PaymentProcessorContext = {
+  order_id?: string
+} & MedusaPaymentProcessorContext
+
 
 abstract class RazorpayBase extends AbstractPaymentProcessor {
   static identifier = "";

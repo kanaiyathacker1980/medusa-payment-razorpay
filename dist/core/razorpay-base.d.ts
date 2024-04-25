@@ -1,5 +1,5 @@
 import Razorpay from "razorpay";
-import { AbstractPaymentProcessor, Cart, CartService, Customer, CustomerService, Logger, PaymentProcessorContext, PaymentProcessorError, PaymentProcessorSessionResponse, PaymentSessionStatus } from "@medusajs/medusa";
+import { AbstractPaymentProcessor, Cart, CartService, Customer, CustomerService, Logger, PaymentProcessorContext as MedusaPaymentProcessorContext, PaymentProcessorError, PaymentProcessorSessionResponse, PaymentSessionStatus } from "@medusajs/medusa";
 import { PaymentIntentOptions, RazorpayOptions } from "../types";
 import { Orders } from "razorpay/dist/types/orders";
 import { Customers } from "razorpay/dist/types/customers";
@@ -7,6 +7,9 @@ import { Customers } from "razorpay/dist/types/customers";
  * The paymentIntent object corresponds to a razorpay order.
  *
  */
+type PaymentProcessorContext = {
+    order_id?: string;
+} & MedusaPaymentProcessorContext;
 declare abstract class RazorpayBase extends AbstractPaymentProcessor {
     static identifier: string;
     protected readonly options_: RazorpayOptions;

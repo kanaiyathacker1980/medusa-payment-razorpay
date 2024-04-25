@@ -71,10 +71,6 @@ var medusa_1 = require("@medusajs/medusa");
 var types_1 = require("../types");
 var utils_1 = require("@medusajs/utils");
 var crypto_1 = __importDefault(require("crypto"));
-/**
- * The paymentIntent object corresponds to a razorpay order.
- *
- */
 var RazorpayBase = /** @class */ (function (_super) {
     __extends(RazorpayBase, _super);
     function RazorpayBase(container, options) {

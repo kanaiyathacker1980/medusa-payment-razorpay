@@ -350,10 +350,13 @@ abstract class RazorpayBase extends AbstractPaymentProcessor {
       const cart = await this.cartService.retrieve(cartId, {
         relations: ["billing_address", "customer"],
       });
+      console.log("createOrUpdateCustomer GET CART DATA ", cart, "CART ID", cartId);
       const razorpay_id =
         customer.metadata.razorpay_id ||
         (customer.metadata as any).razorpay?.rp_customer_id ||
         intentRequest.notes.razorpay_id;
+        console.log("createOrUpdateCustomer razorpay_id", razorpay_id);
+        console.log("createOrUpdateCustomer customer", customer);
       try {
         if (razorpay_id) {
           this.logger.info("the updating  existing customer  in razopay");
@@ -435,6 +438,7 @@ abstract class RazorpayBase extends AbstractPaymentProcessor {
         resource_id
       );
       try {
+        console.log("Razorpay Customer =====>" , razorpayCustomer);
         if (razorpayCustomer) {
           session_data = await this.razorpay_.orders.create(intentRequest);
         } else {
@@ -493,6 +497,7 @@ abstract class RazorpayBase extends AbstractPaymentProcessor {
   ): Promise<
     PaymentProcessorError | PaymentProcessorSessionResponse["session_data"]
   > {
+    console.log("******IN CAPTURE PAYMENT METHOD******", paymentSessionData)
     const order_id = (paymentSessionData as unknown as Orders.RazorpayOrder).id;
     const paymentsResponse = await this.razorpay_.orders.fetchPayments(
       order_id
@@ -537,19 +542,17 @@ abstract class RazorpayBase extends AbstractPaymentProcessor {
   > {
     const id = (paymentSessionData as unknown as Orders.RazorpayOrder)
       .id as string;
-    const paymentIntent = await this.razorpay_.orders.fetch(id);
-    const paymentList = paymentIntent.payments ?? {};
-
+    // Commented: Not required as `paymentSessionData` returns all required information
+    // const paymentIntent = await this.razorpay_.orders.fetch(id);
+    const paymentList = paymentSessionData?.payments ?? {};
     const paymentIds = Object.keys(paymentList);
     const payments = await Promise.all(
       paymentIds.map(
         async (paymentId) => await this.razorpay_.payments.fetch(paymentId)
       )
     );
-    const payment_id = payments.find((p) => {
-      parseInt(p.amount.toString()) >= refundAmount;
-    })?.id;
-
+    // Remved toString and {} from method
+    const payment_id = payments.find((p) => parseInt(p.amount.toString()) >= refundAmount)?.id;
     if (payment_id) {
       const refundRequest: Refunds.RazorpayRefundCreateRequestBody = {
         amount: refundAmount,
